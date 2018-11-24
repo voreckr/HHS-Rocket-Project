@@ -1,0 +1,21 @@
+Wed 24 Oct 22:50:48 PDT 2018
+===================================
+Traceback (most recent call last):
+  File "/usr/lib/python3.5/threading.py", line 914, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.5/threading.py", line 862, in run
+    self._target(*self._args, **self._kwargs)
+  File "ADC_Transmit_HHS_2.py", line 94, in polling_adc
+    device.send_data(remote_device, D1)
+  File "/home/pi/.local/lib/python3.5/site-packages/digi/xbee/devices.py", line 1548, in send_data
+    return self._send_data_64(remote_xbee_device.get_64bit_addr(), data, transmit_options)
+  File "/home/pi/.local/lib/python3.5/site-packages/digi/xbee/devices.py", line 1028, in dec_function
+    return func(self, *args, **kwargs)
+  File "/home/pi/.local/lib/python3.5/site-packages/digi/xbee/devices.py", line 1038, in dec_function
+    response = func(*args, **kwargs)
+  File "/home/pi/.local/lib/python3.5/site-packages/digi/xbee/devices.py", line 1446, in _send_data_64
+    return self.send_packet_sync_and_get_response(packet)
+  File "/home/pi/.local/lib/python3.5/site-packages/digi/xbee/devices.py", line 2423, in send_packet_sync_and_get_response
+    raise TimeoutException("Response not received in the configured timeout.")
+digi.xbee.exception.TimeoutException
+

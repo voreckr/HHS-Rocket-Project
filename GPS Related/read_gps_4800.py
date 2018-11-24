@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+
+import time
+import serial
+
+ser = serial.Serial(
+	port='/dev/ttyS0',
+	baudrate = 4800,
+	parity=serial.PARITY_NONE,
+	stopbits=serial.STOPBITS_ONE,
+	bytesize=serial.EIGHTBITS,
+	timeout=2
+)
+
+counter=0
+
+while 1:
+	x=ser.readline()
+	print x
+

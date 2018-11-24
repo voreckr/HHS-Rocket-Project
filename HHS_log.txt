@@ -1,0 +1,106 @@
+
+Fri 16 Mar 05:04:27 UTC 2018
+
+Installed samba from https://www.raspberrypi.org/magpi/samba-file-server/
+
+Got GPS module to interface with Rpi on UART port 
+	powered at 3.3V, using RXD on pin 10
+	write to TXD pin 8 also works
+	using: 
+	read_gps.py
+	write_ser.py
+
+	Confirmed GPS device creating correct coodinates!
+		found 
+		$GPGGA,054925.00,3724.85285,N,12211.53775,W,1,06,1.45,52.3,M,-30.1,M,,*5E
+		Matches cell phone!
+
+
+Sun  1 Apr 04:15:35 UTC 2018
+Got Piezo Buzzer working with GPIO Pin 12, GPIO 18, WiPi 1
+
+used softTone.c excample from WiringPi website: wiringpi.com
+used this to compile:
+gcc -Wall -o softTone softTone.c -lwiringPi
+
+4/15/18
+Need to create way to allow GPS RX to operate at 4800 baud instead of default 9600 baud.
+This is so that the RPi UART Serial output and input can operate at the same rate with:
+  - Input from GPS RX (need to be at 4800 baud)
+  - Output to Transmitter (required to be at 4800 baud)
+Note: the UART will not operate with different input and output baud rates.
+I noted that the GP-20U7 GPS device always quotes the output baud rate as "9600 baud (Default)"
+I discovered through enough net searching about GP-20U7 GPS device that it used the UBLOX 7 chipset.
+I then searched for a UBLOX 7 device python driver and found something.
+I downloaded the code at
+https://github.com/deleted/ublox
+I had to set the serial port to /dev/ttyS0 to be compatible with the RPi
+But is seems to run ok and trys to configure the GPS device.
+I now need to connect up the unused serial iput port on the GPS device so I can talk to it.
+The code seems to indicate that it writes the updated configuration to flash memory on the GPS device, so this looks like it might be a one time requirement, which would be great!
+
+11pm
+Added serial input wire to GPS unit.
+Using setup_ublox2.py, turned off all message types (except GGA since it has lat/lon/alt and thats all we need.
+
+4/16/18 9:30p
+Discoved that the msg type configuration does not survive power cycle, UNLESS saved to flash by a code in setup_ublox2.py. After I saved config to flash, the baud rate and msg config are preserved!
+This means that it will not be necessary to configure the GPS unit more than once per unit purchased!
+However, it will be necessary to add a serial RX wire to each GPS unit.
+
+2/28/18 23:00
+Configured i2c port using raspi-config. Drivers were aleady installed.
+See:
+https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c
+Using follwing command to verify i2c :
+pi@raspberrypi-hhs-zero:~ $ sudo i2cdetect -y 1
+OR
+gpio i2cd
+
+Get:
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: 60 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+pi@raspberrypi-hhs-zero:~ $
+
+4/30/18 8pm
+Got Altimeter to work!
+1. Enable I2C bus, see: 
+	https://learn.sparkfun.com/tutorials/raspberry-pi-spi-and-i2c-tutorial#i2c-on-pi
+	then click on I2C on Pi, follow inastructions on how to enablr I2C bus. I found that all the 
+	drivers that I had loaded using NOOBS were installed and current: no action necessary.
+2. Download the code at:
+https://github.com/ControlEverythingCommunity/MPL3115A2/blob/master/Python/MPL3115A2.py
+3. connect MPL3115A2 Altimeter this way:
+	Pi GPIO Pin	MPL3115A2 Pin
+	3			SDA
+	50			SCL
+	4			Vin
+	6			GND
+4 Result:
+	Pressure : 100.87 kPa
+	Altitude : 125.08 feet
+	Temperature in Celsius  : 20.81 C
+	Temperature in Fahrenheit  : 69.46 F
+	
+5/1/18 10pm
+Moving on to the SAMD21 ADC or Breakout board
+This board has an ARM M0 microcontroller on it and needs to be programmed to acquire analog signals and send the reults to the Raspberry Pi via the USB port.
+It can be programmed using the Arduino IDE (Integrated Development Environment) but that must be installed on either a linux or Windows system. I plan to use the RPi.
+I found simple instructions for installing the IDE here:
+https://www.raspberrypi.org/forums/viewtopic.php?p=1093180#p1093180
+The details on programing the SAMD21 are here:
+https://learn.sparkfun.com/tutorials/samd21-minidev-breakout-hookup-guide/all#setting-up-arduino
+There is a nice video on how to make the Rpi comminicate with an Arduino over the USB here:
+https://www.youtube.com/watch?v=QumIhvYtRKQ
+THis is not QUITE what we need but very close.
+
+
+
+

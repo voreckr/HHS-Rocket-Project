@@ -1,0 +1,22 @@
+
+Thu  1 Nov 23:38:25 PDT 2018
+
+
+ending data to XBEE_A >> 11/01 23:33:02 3.257 V  -72 dBm
+Sending data to XBEE_A >> 11/01 23:33:03 3.257 V  -70 dBm
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "/usr/lib/python3.5/threading.py", line 914, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.5/threading.py", line 862, in run
+    self._target(*self._args, **self._kwargs)
+  File "ADC_Transmit_HHS_2.py", line 99, in polling_adc
+    device._send_data_64(remote_64addr, D1) # we already have the 64 bit addres, so dont get it again
+  File "/home/pi/.local/lib/python3.5/site-packages/digi/xbee/devices.py", line 1028, in dec_function
+    return func(self, *args, **kwargs)
+  File "/home/pi/.local/lib/python3.5/site-packages/digi/xbee/devices.py", line 1040, in dec_function
+    raise XBeeException("Transmit status: %s" % response.transmit_status.description)
+digi.xbee.exception.XBeeException: Transmit status: CCA failure.
+
+
+
