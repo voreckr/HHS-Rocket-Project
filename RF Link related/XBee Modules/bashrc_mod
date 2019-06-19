@@ -1,0 +1,2 @@
+alias run='/home/pi/HHS/RF\ Link\ related/XBee\ Modules/run.sh'
+alias stop='/home/pi/HHS/RF\ Link\ related/XBee\ Modules/stop.sh'
